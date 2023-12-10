@@ -4,8 +4,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
 }
-
 li {
     list-style: none;
 }
@@ -313,19 +313,37 @@ body {
 }
 
 .profile-sidebar {
-    max-height: 35rem;
+    height: 35rem;
     flex: 1 0 25%;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    box-shadow: var(--primary-box-shadow)
+    box-shadow: var(--primary-box-shadow);
+    top: 0;
+    transition: top .5s ease-in-out;
+}
+
+.profile-sidebar.active {
+    position: sticky;
+    top: 6rem;
+}
+
+.profile-name.active {
+    margin: 0;
+}
+
+.profile-avatar.active {
+    position: static;
+    transform: translate(0);
+    margin-top: 1rem;
 }
 
 .profile-info {
     flex: 1 1 auto;
     height: auto;
+    color: var(--profile-text-color);
 }
 
 img {
@@ -340,6 +358,7 @@ img {
     top: -10%;
     left: 50%;
     transform: translate(-50%, -10%);
+    transition: transform .5s ease-in-out;
 }
 
 .profile-avatar > img {
@@ -383,12 +402,10 @@ img {
 .profile-socials__item > svg {
     fill: var(--profile-text-color);
     transition: fill 0.3s ease-in-out, color 0.3s ease-in-out;
-
-    &:hover {
-        fill: var(--primary-hover-color)
-    }
 }
-
+.profile-socials__item > svg:hover {
+    fill: var(--primary-hover-color)
+}
 .profile-contacts {
     background: var(--bg-accent);
     padding-top: 2rem;
@@ -414,12 +431,10 @@ img {
     gap: 1rem;
     align-items: center;
     font-family: "Archivo", sans-serif;
-
-    & svg {
-        fill: var(--profile-text-color);
-    }
 }
-
+.contacts-list__item > svg {
+    fill: var(--profile-text-color);
+}
 .profile-button {
     background-color: var(--primary-hover-color);
     border-radius: 1rem;
@@ -430,13 +445,14 @@ img {
     padding: 1rem 2.5rem;
     margin: 1rem 0;
     white-space: nowrap;
-
-    & svg {
-        fill: var(--bg-secondary);
-        margin-right: .5rem;
-    }
 }
-
+.profile-button:hover {
+    opacity: 0.9;
+}
+.profile-button > svg {
+    fill: var(--bg-secondary);
+    margin-right: .5rem;
+}
 .profile-button__text {
     font-size: 1.1rem;
 }
@@ -461,7 +477,6 @@ img {
 }
 
 .profile-about__title {
-    color: var(--profile-text-color);
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -470,6 +485,7 @@ img {
     margin-bottom: 2.5rem;
 
 }
+
 .about-title__underscored::before {
     content: '';
     background-color: var(--primary-hover-color);
@@ -479,42 +495,163 @@ img {
     bottom: -1rem;
     width: 3rem;
 }
-.profile-info__arrow-down {
+
+.navigation-arrow {
     width: 2rem;
     height: 2rem;
-    background: var(--primary-hover-color);
+    border: .2rem solid var(--primary-hover-color);
     border-radius: 50%;
+    display: grid;
+    cursor: pointer;
 }
-
+.navigation-arrow:hover {
+    animation-name: jump;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
 .profile-about__text {
     margin: 1.5rem 0;
 }
+
 .text-slate {
     color: var(--slate-text-color);
     font-family: "Archivo", sans-serif;
     font-size: 0.938rem;
 }
+
 .profile-services__wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
 }
+
 .profile-refs__wrapper {
     display: flex;
     gap: 1.5rem;
-    overflow: hidden;
 }
+
 .profile-refs__item {
     background: var(--bg-accent);
-    padding: 4rem;
-    flex: 0 0 48%;
+    padding: 1.3rem;
+    flex: 0 1 50%;
     border-radius: var(--radius-main);
+    position: relative;
 }
+
 .profile-services__item {
     background: var(--bg-secondary);
-    padding: 4rem;
+    padding: 1.3rem;
     border-radius: var(--radius-main);
+    display: flex;
+    gap: 1.5rem;
 }
+
+.services-item__heading {
+    padding-bottom: .5rem;
+}
+
+.services-item__image {
+    width: 3.5rem;
+    height: 2.5rem;
+}
+
+.refs-item__avatar {
+    width: 5rem;
+    height: 5rem;
+    position: absolute;
+    top: -2rem;
+    left: 2rem;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+.refs-item__name {
+    padding: 0 0 .5rem 6rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.refs-item__name::after {
+    content: '';
+    background-image: url('./assets/icon-quote.svg');
+    background-repeat: no-repeat;
+    height: 2rem;
+    width: 2.5rem;
+    display: block;
+    justify-self: end;
+}
+.arrow-up {
+    float: right;
+}
+/*timeline*/
+
+.timeline-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+}
+
+.timeline {
+    width: 80%;
+    height: auto;
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 3px 1fr;
+}
+.timeline-content {
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 5px;
+    transition: 0.4s ease;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    margin: 1rem;
+}
+
+.timeline-period {
+    padding: 1.5rem;
+    letter-spacing: 1px;
+}
+.timeline-component__description {
+    color: var(--slate-text-color);
+}
+
+.timeline-middle {
+    position: relative;
+    background: var(--primary-hover-color);
+    width: 3px;
+    height: 100%;
+}
+
+.main-middle {
+    opacity: 0;
+}
+
+.timeline-circle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--primary-hover-color);
+    transform: translateX(-50%);
+}
+@keyframes jump {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-0.5rem);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
 /*---- media queries ----*/
 
 @media screen and (max-width: 1200px) {
@@ -549,8 +686,13 @@ img {
     .resume {
         max-width: var(--container-sm);
     }
+
     .profile-refs__item {
         flex: 1 0 100%;
+    }
+
+    .profile-refs__wrapper {
+        flex-direction: column;
     }
 }
 
@@ -558,11 +700,23 @@ img {
     .profile-contacts__list {
         flex-direction: column;
     }
-
     .resume {
         max-width: var(--container-xs);
     }
+
     .profile-services__wrapper {
         grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .refs-item__name {
+        padding: 1.5rem 0 0.5rem 0;
+    }
+    .timeline {
+        width: auto !important;
+    }
+    .timeline-wrapper {
+        align-items: flex-start !important;
     }
 }
